@@ -1,0 +1,35 @@
+import discord
+import os 
+import random
+
+x = os.listdir("Fotos")
+Tema = ["Consumo abusivo", "Contaminación Atmosférica", "Sequía"]
+# La variable intents almacena los privilegios del bot
+intents = discord.Intents.default()
+# Activar el privilegio de lectura de mensajes
+intents.message_content = True
+# Crear un bot en la variable cliente y transferirle los privilegios
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'Hemos iniciado sesión como {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if message.content.startswith("/Fotos"):
+        img_random = random.choice(x)
+        await message.channel.send(file = discord.File(f"Fotos/{img_random}"))
+    elif message.content.startswith("/Tema"):
+        await message.channel.send(Tema)
+    elif message.content.startswith("/ContaminaciónAtmosférica"):
+        await message.channel.send("http://www.ideam.gov.co/web/contaminacion-y-calidad-ambiental/contaminacion-atmosferica#:~:text=La%20contaminaci%C3%B3n%20atmosf%C3%A9rica%20es%20la,encuentran%20expuestas%20a%20dicho%20ambiente")
+    elif message.content.startswith("/Sequía"):
+        await message.channel.send("https://www.un.org/es/climatechange/science/climate-issues/water#:~:text=El%20cambio%20clim%C3%A1tico%20est%C3%A1%20acelerando,todo%20el%20ciclo%20del%20agua.")
+    elif message.content.startswith("/ConsumoAbusivo"):
+        await message.channel.send("https://www.ecologiaverde.com/como-afecta-el-consumismo-al-medio-ambiente-2755.html#:~:text=En%20definitiva%2C%20el%20consumismo%20provoca,una%20grave%20p%C3%A9rdida%20de%20biodiversidad.")
+    elif message.content.startswith("/Recomendaciones"):
+        await message.channel.send("https://www.gob.mx/aprendemx/articulos/7-formas-sencillas-para-proteger-el-medio-ambiente?idiom=es")
+client.run("")
